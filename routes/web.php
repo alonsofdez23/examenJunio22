@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('inicio');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/compra', [ProductoController::class, 'index'])
+    ->name('productos.index');
+
+Route::post('/compra', [ProductoController::class, 'addLinea'])
+    ->name('productos.store');
+
+Route::delete('/compra/{linea}', [ProductoController::class, 'deleteLinea'])
+    ->name('productos.destroy');
+
+Route::delete('/compra', [ProductoController::class, 'vaciarCarrito'])
+    ->name('productos.alldestroy');
+
+Route::get('/ticket', [ProductoController::class, 'generarTicket'])
+    ->name('productos.ticket');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 
 require __DIR__.'/auth.php';
