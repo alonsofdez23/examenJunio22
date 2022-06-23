@@ -13,10 +13,12 @@ Se pide:
 1. (1,5 puntos) Crear la base de datos mediante migraciones con, al menos, las siguientes tablas (que contendrán, al menos, las siguientes columnas):
 
     - *productos (**id**, codigo, denominacion, precio)*
+
         La columna `codigo` contiene el código de barras del producto.
         La columna `precio` será el precio unitario del producto si es un producto prefabricado, o el precio base por metro cuadrado si es un producto fabricado.
 
     - *tickets (**id**, tarjeta, created_at)*
+        
         La columna `created_at` contiene la fecha y hora de creación de cada ticket.
         La columna `tarjeta` contiene el número de la tarjeta (16 dígitos) con la que se ha pagado la compra.
 
