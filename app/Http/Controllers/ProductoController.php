@@ -6,8 +6,8 @@ use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Linea;
 use App\Models\Producto;
-use App\Models\Ticket;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProductoController extends Controller
 {
@@ -18,39 +18,30 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $lineas = Linea::all();
+        $productos = Session::get('productos');
 
         $subtotal = 0;
-        foreach ($lineas as $linea) {
-            $subtotal += $linea->producto->precio;
+        if (!empty($productos)) {
+            foreach ($productos as $producto) {
+                $subtotal += $producto['precio'];
+            }
         }
 
         return view('productos.index', [
-            'lineas' => $lineas,
+            'productos' => $productos,
             'subtotal' => $subtotal,
         ]);
     }
 
-    public function addLinea(StoreProductoRequest $request)
+    public function addLinea(Request $request)
     {
-        //dd($request);
-
-        $ticket = new Ticket([
-            'tarjeta' => 0,
-        ]);
-
-        $ticket->save();
-
         $producto = Producto::where('codigo', $request->codigo)->first();
 
-        //dd($producto);
-
-        $linea = new Linea([
-            'producto_id' => $producto->id,
-            'ticket_id' => $ticket->id,
+        Session::push('productos', [
+            'codigo' => $producto->codigo,
+            'denominacion' => $producto->denominacion,
+            'precio' => $producto->precio,
         ]);
-
-        $linea->save();
 
         return redirect()->route('productos.index')
             ->with('success', 'Producto añadido correctamente');
@@ -66,11 +57,7 @@ class ProductoController extends Controller
 
     public function vaciarCarrito()
     {
-        $lineas = Linea::all();
-
-        foreach ($lineas as $linea) {
-            $linea->delete();
-        }
+        Session::forget('productos');
 
         return redirect()->route('productos.index')
             ->with('error', 'Carrito vacío');
