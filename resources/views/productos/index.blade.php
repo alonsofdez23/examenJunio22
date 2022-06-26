@@ -81,7 +81,7 @@
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        {{ $producto['precio'] }}
+                                                        {{ $producto['precio'] }}€
                                                     </div>
                                                 </td>
                                                 {{-- <td class="px-6 py-4 inline-flex">
@@ -108,7 +108,7 @@
                                             Anular compra
                                         </x-button>
                                     </form>
-                                    <form action="{{ route('productos.ticket') }}" method="GET">
+                                    <form action="{{ route('productos.pago') }}" method="GET">
                                         @csrf
                                         <x-button>
                                             Finalizar compra

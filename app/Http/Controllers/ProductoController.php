@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Linea;
 use App\Models\Producto;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -63,19 +64,47 @@ class ProductoController extends Controller
             ->with('error', 'Carrito vacío');
     }
 
-    public function generarTicket()
+    public function pasarelaPago()
     {
-        $lineas = Linea::all();
+        $productos = Session::get('productos');
 
         $subtotal = 0;
-        foreach ($lineas as $linea) {
-            $subtotal += $linea->producto->precio;
+        if (!empty($productos)) {
+            foreach ($productos as $producto) {
+                $subtotal += $producto['precio'];
+            }
         }
 
         return view('tickets.show', [
-            'lineas' => $lineas,
+            'productos' => $productos,
             'subtotal' => $subtotal,
         ]);
+    }
+
+    public function pagarTicket(Request $request)
+    {
+        $ticket = new Ticket([
+            'tarjeta' => $request->tarjeta,
+        ]);
+
+        $ticket->save();
+
+        $productos = Session::get('productos');
+
+        foreach ($productos as $producto) {
+            $productoModel = Producto::firstWhere('codigo', $producto['codigo']);
+
+            $linea = new Linea([
+                'ticket_id' => $ticket->id,
+                'producto_id' => $productoModel->id,
+            ]);
+
+            $linea->save();
+        }
+
+        Session::forget('productos');
+
+        return redirect()->route('inicio');
     }
 
     /**
