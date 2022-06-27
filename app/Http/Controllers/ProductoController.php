@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductoRequest;
+use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Linea;
 use App\Models\Producto;
@@ -81,10 +82,12 @@ class ProductoController extends Controller
         ]);
     }
 
-    public function pagarTicket(Request $request)
+    public function pagarTicket(StoreTicketRequest $request)
     {
+        $validados = $request->validated();
+
         $ticket = new Ticket([
-            'tarjeta' => $request->tarjeta,
+            'tarjeta' => $validados['tarjeta'],
         ]);
 
         $ticket->save();

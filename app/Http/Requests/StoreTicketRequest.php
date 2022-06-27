@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\algoritmoLuhn;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTicketRequest extends FormRequest
@@ -24,7 +25,11 @@ class StoreTicketRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'tarjeta' => [
+                'required',
+                'digits:16',
+                new algoritmoLuhn(),
+            ]
         ];
     }
 }
