@@ -24,7 +24,7 @@ Route::get('/compra', [ProductoController::class, 'index'])
 Route::post('/compra', [ProductoController::class, 'addLinea'])
     ->name('productos.store');
 
-Route::delete('/compra/{linea}', [ProductoController::class, 'deleteLinea'])
+Route::delete('/compra/{producto}', [ProductoController::class, 'deleteLinea'])
     ->name('productos.destroy');
 
 Route::delete('/compra', [ProductoController::class, 'vaciarCarrito'])

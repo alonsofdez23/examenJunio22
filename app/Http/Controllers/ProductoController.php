@@ -49,9 +49,9 @@ class ProductoController extends Controller
             ->with('success', 'Producto añadido correctamente');
     }
 
-    public function deleteLinea(Linea $linea)
+    public function deleteLinea($producto)
     {
-        $linea->delete();
+        unset($producto);
 
         return redirect()->route('productos.index')
             ->with('error', 'Producto borrado correctamente');

@@ -84,13 +84,15 @@
                                                         {{ $producto['precio'] }}€
                                                     </div>
                                                 </td>
-                                                {{-- <td class="px-6 py-4 inline-flex">
-                                                    <form action="{{ route('productos.destroy', $linea) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
+                                                <td class="px-6 py-4 inline-flex">
+                                                    <form action="@php
+                                                        Session::get('productos', function () {
+                                                            unset($productos[$producto]);
+                                                        });
+                                                    @endphp" method="GET">
                                                         <button class="py-1 px-4 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded text-sm text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Borrar</button>
                                                     </form>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
